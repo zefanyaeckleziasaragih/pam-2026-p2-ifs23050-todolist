@@ -36,7 +36,11 @@ class TodoController(private val todoService: ITodoService) {
     }
 
     suspend fun createTodo(call: ApplicationCall) {
-        val request = call.receive<TodoRequest>()
+        val request = try {
+            call.receive<TodoRequest>()
+        } catch (e: Exception) {
+            throw AppException(400, "Format data tidak valid!")
+        }
 
         val requestData = mapOf(
             "title" to request.title,
@@ -60,7 +64,12 @@ class TodoController(private val todoService: ITodoService) {
     suspend fun updateTodo(call: ApplicationCall) {
         val id = call.parameters["id"]
             ?: throw AppException(400, "ID todo tidak boleh kosong!")
-        val request = call.receive<TodoRequest>()
+
+        val request = try {
+            call.receive<TodoRequest>()
+        } catch (e: Exception) {
+            throw AppException(400, "Format data tidak valid!")
+        }
 
         val requestData = mapOf(
             "title" to request.title,
@@ -79,7 +88,7 @@ class TodoController(private val todoService: ITodoService) {
         val response = DataResponse(
             "success",
             "Berhasil mengubah data todo",
-            mapOf("isUpdated" to true)  // PERBAIKAN: Jangan null, kasih data
+            mapOf("isUpdated" to true)
         )
         call.respond(response)
     }
@@ -96,7 +105,7 @@ class TodoController(private val todoService: ITodoService) {
         val response = DataResponse(
             "success",
             "Berhasil menghapus data todo",
-            mapOf("isDeleted" to true)  // PERBAIKAN: Jangan null, kasih data
+            mapOf("isDeleted" to true)
         )
         call.respond(response)
     }
