@@ -19,27 +19,14 @@ fun Application.configureRouting() {
         exception<AppException> { call, cause ->
             val dataMap: Map<String, List<String>> = parseMessageToMap(cause.message)
 
-            // Jika ada validation errors (dataMap tidak kosong)
-            if (dataMap.isNotEmpty()) {
-                call.respond(
-                    status = HttpStatusCode.BadRequest,
-                    message = ErrorResponse(
-                        status = "fail",
-                        message = "Data yang dikirimkan tidak valid!",
-                        data = dataMap
-                    )
+            call.respond(
+                status = HttpStatusCode.fromValue(cause.code),
+                message = ErrorResponse(
+                    status = "fail",
+                    message = if (dataMap.isEmpty()) cause.message else "Data yang dikirimkan tidak valid!",
+                    data = dataMap
                 )
-            } else {
-                // Error biasa tanpa validation
-                call.respond(
-                    status = HttpStatusCode.fromValue(cause.code),
-                    message = ErrorResponse(
-                        status = "fail",
-                        message = cause.message,
-                        data = emptyMap()
-                    )
-                )
-            }
+            )
         }
 
         // Tangkap semua Throwable lainnya
@@ -56,7 +43,7 @@ fun Application.configureRouting() {
 
     routing {
         get("/") {
-            call.respondText("11S23050 - Zefanya Saragih")
+            call.respondText("11S23051 - Yuri Pakpahan")
         }
 
         route("/todos") {

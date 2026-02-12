@@ -16,7 +16,7 @@ class TodoController(private val todoService: ITodoService) {
         val response = DataResponse(
             "success",
             "Berhasil mengambil daftar todo",
-            mapOf(Pair("todos", todos))
+            mapOf("todos" to todos)
         )
         call.respond(response)
     }
@@ -30,7 +30,7 @@ class TodoController(private val todoService: ITodoService) {
         val response = DataResponse(
             "success",
             "Berhasil mengambil data todo",
-            mapOf(Pair("todo", todo))
+            mapOf("todo" to todo)
         )
         call.respond(response)
     }
@@ -52,7 +52,7 @@ class TodoController(private val todoService: ITodoService) {
         val response = DataResponse(
             "success",
             "Berhasil menambahkan data todo",
-            mapOf(Pair("todoId", todoId))
+            mapOf("todoId" to todoId)
         )
         call.respond(response)
     }
@@ -79,7 +79,7 @@ class TodoController(private val todoService: ITodoService) {
         val response = DataResponse(
             "success",
             "Berhasil mengubah data todo",
-            null
+            mapOf("isUpdated" to true)  // PERBAIKAN: Jangan null, kasih data
         )
         call.respond(response)
     }
@@ -96,7 +96,7 @@ class TodoController(private val todoService: ITodoService) {
         val response = DataResponse(
             "success",
             "Berhasil menghapus data todo",
-            null
+            mapOf("isDeleted" to true)  // PERBAIKAN: Jangan null, kasih data
         )
         call.respond(response)
     }
